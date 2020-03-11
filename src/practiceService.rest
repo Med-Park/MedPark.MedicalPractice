@@ -1,0 +1,142 @@
+@apiUrl = http://localhost:8000/api/specialist
+@specialistId = 4B4E5886-2BE0-40D9-9DBF-96ED5722CF52
+@PracticeId = d83539f7-0919-40c1-bf69-4f99bf8db13f
+@otp = ""
+@instituteId = ""
+@medicalSchemeId = ""
+@appoitnmentTypeId = 1249FE61-3649-4FEE-BD3F-E756E4010874
+
+
+### Get specilaist details by id
+GET {{apiUrl}}/{{specialistId}}
+
+
+### Get specialist registration OTP details
+GET {{apiUrl}}/getregistrationotp/{{otp}}
+
+
+### Get practice by Id
+GET {{apiUrl}}/getpractice/{{PracticeId}}
+
+
+### Get Practice details
+GET {{apiUrl}}/getpracticedetails/{{PracticeId}}
+
+
+### Get medical schemes accepted by practice
+GET {{apiUrl}}/getacceptedschemes/{{PracticeId}}
+
+
+### Get specialist insttute by id
+GET {{apiUrl}}/getinstitute/{{instituteId}}
+
+
+### Get medical scheme by Id
+GET {{apiUrl}}/getmedicalscheme/{{medicalSchemeId}}
+
+
+### Get the operating hours for a practice by Id
+GET {{apiUrl}}/getpracticeoperatinghours/{{PracticeId}}
+
+
+### Get the qualifications for a specialist by Id
+GET {{apiUrl}}/specialistqualifications/{{specialistId}}
+
+
+### Get appointment types
+GET {{apiUrl}}/appointmenttypes
+
+### Get specialists linked to appointment type
+GET {{apiUrl}}/specialistsLinkedToAppointmentType/{{appoitnmentTypeId}}
+
+
+### Add new registration OTP
+POST {{apiUrl}}/addregistrationotp
+Content-Type: application/json
+
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "firstName": null,
+  "lastName": null,
+  "email": null,
+  "mobile": null,
+  "practiceId": "00000000-0000-0000-0000-000000000000",
+  "isAdmin": false
+}
+
+
+
+### Add address
+POST {{apiUrl}}/addaddress
+Content-Type: application/json
+
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "addressLine1": null,
+  "addressLine2": null,
+  "addressLine3": null,
+  "postalCode": null,
+  "practiceId": "00000000-0000-0000-0000-000000000000"
+}
+
+
+### Update practice address
+POST {{apiUrl}}/updateaddress
+Content-Type: application/json
+
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "addressLine1": null,
+  "addressLine2": null,
+  "addressLine3": null,
+  "postalCode": null,
+  "practiceId": "00000000-0000-0000-0000-000000000000"
+}
+
+
+### link accpetected medical scheme to practice
+POST {{apiUrl}}/addacceptedscheme
+Content-Type: application/json
+
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "schemeName": null,
+  "schemeId": "00000000-0000-0000-0000-000000000000",
+  "practiceId": "00000000-0000-0000-0000-000000000000",
+  "dateEffective": "0001-01-01T00:00:00",
+  "dateEnd": "0001-01-01T00:00:00",
+  "isActive": false
+}
+
+
+#### Updated accepeted scheme
+POST {{apiUrl}}/updateacceptedscheme
+Content-Type: application/json
+
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "schemeName": null,
+  "schemeId": "00000000-0000-0000-0000-000000000000",
+  "practiceId": "00000000-0000-0000-0000-000000000000",
+  "dateEffective": "0001-01-01T00:00:00",
+  "dateEnd": "0001-01-01T00:00:00",
+  "isActive": false
+}
+
+
+### Remove accepted medical scheme from practice
+POST {{apiUrl}}/removeacceptedscheme
+Content-Type: application/json
+
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+}
+
+### Link specialist to appointment type
+POST {{apiUrl}}/linkspecialistappointments
+Content-Type: application/json
+
+{
+  "specialistid": "{{specialistId}}",
+  "appointmenttypeid": "{{appoitnmentTypeId}}"
+}
