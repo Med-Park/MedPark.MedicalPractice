@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
+using Consul;
 using MedPark.Common;
+using MedPark.Common.Consul;
 using MedPark.Common.Handlers;
 using MedPark.Common.RabbitMq;
 using MedPark.CustomersService.Messages.Events;
@@ -45,6 +47,8 @@ namespace MedPark.MedicalPractice
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Startup));
+            services.AddHealthChecks();
+            services.AddConsul();
 
             //Add DBContext
             services.AddDbContext<MedicalPracticeDbContext>(options => options.UseSqlServer(Configuration["Database:ConnectionString"]));
@@ -73,7 +77,7 @@ namespace MedPark.MedicalPractice
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostEnvironment env, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IHostEnvironment env, IHostApplicationLifetime lifetime, IConsulClient consulClient)
         {
             if (env.IsDevelopment())
             {
@@ -109,6 +113,18 @@ namespace MedPark.MedicalPractice
                 .SubscribeEvent<SpecialistSignedUp>(@namespace: "identity")
                 .SubscribeEvent<CustomerCreated>(@namespace: "customers")
                 .SubscribeEvent<CustomerDetailsUpated>(@namespace: "customers");
+
+            app.UseRouting();
+            app.UseEndpoints(endpoit =>
+            {
+                endpoit.MapHealthChecks("/health");
+            });
+
+            var serviceID = app.UseConsul();
+            lifetime.ApplicationStopped.Register(() =>
+            {
+                consulClient.Agent.ServiceDeregister(serviceID);
+            });
 
             app.UseMvcWithDefaultRoute();
         }
